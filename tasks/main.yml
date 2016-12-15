@@ -1,0 +1,39 @@
+---
+# file: tasks/main.yml
+- name: Create remote temporary backup folder
+  file:
+    path={{ backup_location_remote }}
+    owner=root
+    mode=0600
+    state=directory
+
+- name: Dump MySQL databases
+  mysql_db:
+    name={{ item }}
+    target={{ backup_location_remote }}/{{ item }}.sql.gz
+    state=dump
+  with_items: "{{ backup_mysql_databases }}"
+
+- name: Backup directories
+  command: tar -zcvf {{ backup_location_remote }}/{{ item.name }}.tar.gz {{ item.src }}
+  with_items: "{{ backup_directories }}"
+
+- name: Tighten permissions of backup files
+  file:
+    path="{{ backup_location_remote }}"
+    recurse=yes
+    mode="go-rwx"
+
+- name: Fetch MySQL database dumps
+  fetch:
+    src={{ backup_location_remote }}/{{ item }}.sql.gz
+    dest={{ backup_location_local }}/{{ inventory_hostname }}
+    flat=yes
+  with_items: "{{ backup_mysql_databases }}"
+
+- name: Fetch backup files
+  fetch:
+    src={{ backup_location_remote }}/{{ item.name }}.tar.gz
+    dest={{ backup_location_local }}/{{ inventory_hostname }}
+    flat=yes
+  with_items: "{{ backup_directories }}"
