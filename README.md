@@ -22,7 +22,7 @@ Available variables are listed below, along with their default values. The defau
     src: /var/www/html
 ```
 
-**backup_location_local**: The directory name of the *local* destination, where the backup files will be transferred to. Defaults to `/tmp`. Note that a subdirectory will be created, with the value of the `inventory_hostname` variable.
+**backup_location_local**: The directory name of the *local* destination, where the backup files will be transferred to. Note that a subdirectory will be created, with the value of the `inventory_hostname` variable. Defaults to `/backup`.
 
 **backup_location_remote**: The temporary location of the backup files on the *remote* server. Defaults to `/tmp/backup`
 

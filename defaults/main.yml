@@ -1,4 +1,4 @@
 ---
 # defaults file for PeterMosmans.backup
-backup_location_local: /tmp
+backup_location_local: /backup
 backup_location_remote: /tmp/backup
