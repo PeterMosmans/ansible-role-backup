@@ -2,9 +2,9 @@
 # file: tasks/main.yml
 - name: Create remote temporary backup folder
   file:
-    path={{ backup_location_remote }}
+    path="{{ backup_location_remote }}"
     owner=root
-    mode=0600
+    mode="0600"
     state=directory
 
 - name: Dump MySQL databases
