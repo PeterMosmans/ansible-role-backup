@@ -12,11 +12,11 @@
     name={{ item }}
     target={{ backup_location_remote }}/{{ item }}.sql.gz
     state=dump
-  with_items: "{{ backup_mysql_databases }}"
+  with_items: "{{ backup_mysql_databases|default([]) }}"
 
 - name: Backup directories
   command: tar -zcvf {{ backup_location_remote }}/{{ item.name }}.tar.gz {{ item.src }}
-  with_items: "{{ backup_directories }}"
+  with_items: "{{ backup_directories|default([]) }}"
 
 - name: Tighten permissions of backup files
   file:
@@ -29,11 +29,11 @@
     src={{ backup_location_remote }}/{{ item }}.sql.gz
     dest={{ backup_location_local }}/{{ inventory_hostname }}/{{ item }}.sql.gz
     flat=yes
-  with_items: "{{ backup_mysql_databases }}"
+  with_items: "{{ backup_mysql_databases|default([]) }}"
 
 - name: Fetch backup files
   fetch:
     src={{ backup_location_remote }}/{{ item.name }}.tar.gz
     dest={{ backup_location_local }}/{{ inventory_hostname }}/{{ item.name }}.tar.gz
     flat=yes
-  with_items: "{{ backup_directories }}"
+  with_items: "{{ backup_directories|default([]) }}"
